@@ -54,6 +54,10 @@ another, smaller or fingerprinted, byte stream.
   expose buffered variants where it matters.
 - **Multi-arch.** Pure-Go reference implementations; SIMD / NEON
   acceleration is layered behind build tags where it makes sense.
+  `blake3` (`mix4`) and `matchlen` ship SIMD on **all six** of Go's 64-bit
+  targets — amd64, arm64, riscv64, loong64, ppc64le (VSX) and s390x (vector
+  facility, big-endian) — via [go-asmgen](https://github.com/go-asmgen/asmgen)-generated
+  assembly. `lz4` and `b3sum` inherit it per-arch with no code change of their own.
 
 ## Who uses it
 
