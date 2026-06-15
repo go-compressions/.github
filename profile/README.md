@@ -33,6 +33,7 @@ another, smaller or fingerprinted, byte stream.
 | [`lz4`](https://github.com/go-compressions/lz4)           | Pure-Go LZ4 block codec, wire-compatible with `pierrec/lz4` (SIMD match-finder via [go-simd/matchlen](https://github.com/go-simd/matchlen)). |
 | [`lzfse`](https://github.com/go-compressions/lzfse)       | Pure-Go LZFSE / LZVN codec (Apple's algorithm — LZFSE = LZVN + entropy stage).    |
 | [`lzfsec`](https://github.com/go-compressions/lzfsec)     | CLI wrapper around `lzfse`, mirroring Apple's reference `lzfse` binary.           |
+| [`lz4c`](https://github.com/go-compressions/lz4c)         | Reference CLI for the `lz4` block codec (compress by default, `-d` to decompress, stdin/stdout pipes). |
 
 ### Content-addressable hashes
 
