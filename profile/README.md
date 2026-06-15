@@ -1,4 +1,8 @@
+<p align="center"><img src="https://raw.githubusercontent.com/go-compressions/brand/main/social/go-compressions.png" alt="go-compressions" width="720"></p>
+
 # go-compressions
+
+🌐 **[Website](https://go-compressions.github.io)** · 📚 **[Documentation](https://go-compressions.github.io/docs/)**
 
 **Pure-Go byte-stream transformation primitives.**
 
@@ -26,6 +30,7 @@ another, smaller or fingerprinted, byte stream.
 
 | Repo                                                      | Role                                                                              |
 | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [`lz4`](https://github.com/go-compressions/lz4)           | Pure-Go LZ4 block codec, wire-compatible with `pierrec/lz4` (SIMD match-finder via [go-simd/matchlen](https://github.com/go-simd/matchlen)). |
 | [`lzfse`](https://github.com/go-compressions/lzfse)       | Pure-Go LZFSE / LZVN codec (Apple's algorithm — LZFSE = LZVN + entropy stage).    |
 | [`lzfsec`](https://github.com/go-compressions/lzfsec)     | CLI wrapper around `lzfse`, mirroring Apple's reference `lzfse` binary.           |
 
@@ -54,10 +59,12 @@ another, smaller or fingerprinted, byte stream.
   expose buffered variants where it matters.
 - **Multi-arch.** Pure-Go reference implementations; SIMD / NEON
   acceleration is layered behind build tags where it makes sense.
-  `blake3` (`mix4`) and `matchlen` ship SIMD on **all six** of Go's 64-bit
+  `blake3` (`mix4`) ships SIMD on **all six** of Go's 64-bit
   targets — amd64, arm64, riscv64, loong64, ppc64le (VSX) and s390x (vector
   facility, big-endian) — via [go-asmgen](https://github.com/go-asmgen/asmgen)-generated
-  assembly. `lz4` and `b3sum` inherit it per-arch with no code change of their own.
+  assembly. `b3sum` inherits it per-arch with no code change of its own, and
+  `lz4` gets its SIMD match-finder from [go-simd/matchlen](https://github.com/go-simd/matchlen)
+  (the general SIMD common-prefix primitive now lives in the go-simd org).
 
 ## Who uses it
 
