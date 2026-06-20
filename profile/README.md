@@ -58,14 +58,31 @@ another, smaller or fingerprinted, byte stream.
 - **BSD-3-Clause** on all source files.
 - **Allocation-aware.** Hot paths avoid per-call allocations; APIs
   expose buffered variants where it matters.
-- **Multi-arch.** Pure-Go reference implementations; SIMD / NEON
-  acceleration is layered behind build tags where it makes sense.
-  `blake3` (`mix4`) ships SIMD on **all six** of Go's 64-bit
-  targets — amd64, arm64, riscv64, loong64, ppc64le (VSX) and s390x (vector
-  facility, big-endian) — via [go-asmgen](https://github.com/go-asmgen/asmgen)-generated
+- **Multi-arch — six SIMD targets, validated on seven architectures.**
+  Pure-Go reference implementations; SIMD / NEON acceleration is layered
+  behind build tags where it makes sense. `blake3` (`mix4`) ships SIMD on
+  **all six** of Go's 64-bit SIMD targets — amd64 (AVX2), arm64 (NEON),
+  riscv64 (RVV), loong64 (LSX), ppc64le (VSX) and s390x (vector facility,
+  big-endian) — via [go-asmgen](https://github.com/go-asmgen/asmgen)-generated
   assembly. `b3sum` inherits it per-arch with no code change of its own, and
   `lz4` gets its SIMD match-finder from [go-simd/matchlen](https://github.com/go-simd/matchlen)
   (the general SIMD common-prefix primitive now lives in the go-simd org).
+  Beyond the six SIMD targets, every library (`lz4`, `lzfse`, `blake3`/`b3sum`)
+  also **builds and passes its tests bit-exact on a seventh architecture,
+  ppc64 (big-endian)** — POWER9 silicon, via the portable fallback path —
+  proving big-endian correctness distinct from the s390x vector kernel.
+
+### Measured performance
+
+`ppc64le` is now natively measured on real POWER10 silicon
+([GCC Compile Farm](https://portal.cfarm.net/), VSX, Go 1.26.4, June 2026):
+
+- **lz4 encode** (matchlen-accelerated): **1.8×** scalar (1174 vs 644 MB/s),
+  and **beats `pierrec/lz4`** (1174 vs 1012 MB/s).
+- **blake3 `mix4`**: **4.5×** scalar.
+
+`s390x` is qemu-validated for correctness; native throughput numbers are
+pending a GitHub-hosted IBM Z runner.
 
 ## Who uses it
 
