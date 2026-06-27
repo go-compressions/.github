@@ -13,7 +13,7 @@ zero-copy-friendly primitives that everything else builds on.
 The umbrella covers two adjacent concerns:
 
 - **Compression codecs** — pure-Go implementations of stream
-  compressors (LZFSE/LZVN today; more to come) for projects that need a
+  compressors (LZ4, LZFSE/LZVN today; more to come) for projects that need a
   Go-native body compressor without dragging in cgo bindings.
 - **Content-addressable hashes** — pure-Go implementations of modern
   cryptographic / keyed hashes (BLAKE3 today) used as the address
@@ -28,6 +28,8 @@ another, smaller or fingerprinted, byte stream.
 
 | Repo                                                      | Role                                                                              |
 | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [`lz4`](https://github.com/go-compressions/lz4)           | Pure-Go LZ4 block codec, wire-compatible with `pierrec/lz4` — beats it on ratio, decodes at parity with its arm64-asm decoder. Match extension via `matchlen` SIMD. |
+| [`lz4c`](https://github.com/go-compressions/lz4c)         | CLI wrapper around `lz4` (`compress` / `decompress`).                             |
 | [`lzfse`](https://github.com/go-compressions/lzfse)       | Pure-Go LZFSE / LZVN codec (Apple's algorithm — LZFSE = LZVN + entropy stage).    |
 | [`lzfsec`](https://github.com/go-compressions/lzfsec)     | CLI wrapper around `lzfse`, mirroring Apple's reference `lzfse` binary.           |
 
