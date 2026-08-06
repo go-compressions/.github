@@ -13,8 +13,8 @@ zero-copy-friendly primitives that everything else builds on.
 The umbrella covers two adjacent concerns:
 
 - **Compression codecs** — pure-Go implementations of stream
-  compressors (LZ4, LZFSE/LZVN today; more to come) for projects that need a
-  Go-native body compressor without dragging in cgo bindings.
+  compressors (LZ4, LZFSE/LZVN and DEFLATE/RFC 1951 today) for projects that
+  need a Go-native body compressor without dragging in cgo bindings.
 - **Content-addressable hashes** — pure-Go implementations of modern
   cryptographic / keyed hashes (BLAKE3 today) used as the address
   function in content-addressable storage layers.
@@ -32,6 +32,7 @@ another, smaller or fingerprinted, byte stream.
 | [`lz4c`](https://github.com/go-compressions/lz4c)         | CLI wrapper around `lz4` (`compress` / `decompress`).                             |
 | [`lzfse`](https://github.com/go-compressions/lzfse)       | Pure-Go LZFSE / LZVN codec (Apple's algorithm — LZFSE = LZVN + entropy stage).    |
 | [`lzfsec`](https://github.com/go-compressions/lzfsec)     | CLI wrapper around `lzfse`, mirroring Apple's reference `lzfse` binary.           |
+| [`deflate`](https://github.com/go-compressions/deflate)   | Pure-Go DEFLATE / RFC 1951 (deflate + inflate), bidirectionally wire-compatible with `compress/flate`. Match extension via `matchlen` SIMD. |
 
 ### Content-addressable hashes
 
@@ -58,10 +59,14 @@ another, smaller or fingerprinted, byte stream.
   expose buffered variants where it matters.
 - **Multi-arch.** Pure-Go reference implementations; SIMD / NEON
   acceleration is layered behind build tags where it makes sense.
-  `blake3` (`mix4`) and `matchlen` ship SIMD on **all six** of Go's 64-bit
-  targets — amd64, arm64, riscv64, loong64, ppc64le (VSX) and s390x (vector
-  facility, big-endian) — via [go-asmgen](https://github.com/go-asmgen/asmgen)-generated
-  assembly. `lz4` and `b3sum` inherit it per-arch with no code change of their own.
+  `blake3` (`mix4`) ships SIMD on **all six** of Go's 64-bit targets — amd64,
+  arm64, riscv64, loong64, ppc64le (VSX) and s390x (vector facility, big-endian) —
+  via [go-asmgen](https://github.com/go-asmgen/asmgen)-generated assembly, and
+  `b3sum` inherits it per-arch. `lz4`'s match extension rides the six-target
+  [`go-simd/matchlen`](https://github.com/go-simd/matchlen) common-prefix kernel;
+  `deflate` uses the four-target [`matchlen`](https://github.com/go-compressions/matchlen)
+  (amd64, arm64, loong64, riscv64) with a portable scalar fallback elsewhere. No
+  consumer needs a code change to benefit.
 
 ## Who uses it
 
