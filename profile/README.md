@@ -33,6 +33,11 @@ another, smaller or fingerprinted, byte stream.
 | [`lzfse`](https://github.com/go-compressions/lzfse)       | Pure-Go LZFSE / LZVN codec (Apple's algorithm — LZFSE = LZVN + entropy stage).    |
 | [`lzfsec`](https://github.com/go-compressions/lzfsec)     | CLI wrapper around `lzfse`, mirroring Apple's reference `lzfse` binary.           |
 | [`deflate`](https://github.com/go-compressions/deflate)   | Pure-Go DEFLATE / RFC 1951 (deflate + inflate), bidirectionally wire-compatible with `compress/flate`. Match extension via `matchlen` SIMD. |
+| [`bzip2`](https://github.com/go-compressions/bzip2)         | Pure-Go bzip2 **encoder** — the half `compress/bzip2` does not have. Every archive is read back by `compress/bzip2` AND the reference `bzip2 -t`. |
+| [`compress`](https://github.com/go-compressions/compress)   | Reader for the `.Z` format of `compress(1)` — the LZW `compress/lzw` cannot read, because `.Z` has its own header and a growing code width. |
+| [`lzip`](https://github.com/go-compressions/lzip)           | Reader for lzip (`.lz`) — LZMA with its own framing and CRC. Fixtures written by real GNU lzip 1.26 and plzip 1.13. |
+| [`lzo`](https://github.com/go-compressions/lzo)             | LZO1X decoder and lzop (`.lzo`) container reader, written from a prose description because liblzo2 is GPL-2.0 and this is BSD-3-Clause. |
+| [`adc`](https://github.com/go-compressions/adc)             | Apple Data Compression decoder — the UDCO flavour of a UDIF disk image. Fixtures come off streams Apple wrote. |
 
 ### Content-addressable hashes
 
@@ -64,9 +69,10 @@ another, smaller or fingerprinted, byte stream.
   via [go-asmgen](https://github.com/go-asmgen/asmgen)-generated assembly, and
   `b3sum` inherits it per-arch. `lz4`'s match extension rides the six-target
   [`go-simd/matchlen`](https://github.com/go-simd/matchlen) common-prefix kernel;
-  `deflate` uses the four-target [`matchlen`](https://github.com/go-compressions/matchlen)
-  (amd64, arm64, loong64, riscv64) with a portable scalar fallback elsewhere. No
-  consumer needs a code change to benefit.
+  `deflate` rides the same one. No consumer needs a code change to benefit.
+  (This used to name a four-target `go-compressions/matchlen`; both modules now
+  require `go-simd/matchlen v0.3.1`, and the go-compressions copy is a tombstone
+  nothing imports.)
 
 ## Who uses it
 
