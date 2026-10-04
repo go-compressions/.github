@@ -46,6 +46,12 @@ another, smaller or fingerprinted, byte stream.
 | [`blake3`](https://github.com/go-compressions/blake3)     | Pure-Go [BLAKE3](https://github.com/BLAKE3-team/BLAKE3) hash + keyed-hash + KDF.   |
 | [`b3sum`](https://github.com/go-compressions/b3sum)       | Pure-Go `b3sum` CLI matching the reference Rust [`b3sum`](https://crates.io/crates/b3sum). |
 
+### Test oracles
+
+| Repo                                                      | Role                                                                              |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [`appleoracle`](https://github.com/go-compressions/appleoracle) | macOS `libcompression` exposed so a test can **ask the platform what the bytes should be** — LZFSE, LZVN and Apple's framed LZ4. Not a codec. The stub elsewhere refuses rather than returning a plausible empty answer. |
+
 ### Docs
 
 | Repo                                                      | Role                                                                              |
